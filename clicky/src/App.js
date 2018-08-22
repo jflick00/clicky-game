@@ -1,47 +1,119 @@
 import React, { Component } from 'react';
-// import Wrapper from "./components/Wrapper";
-import NavBar from "./components/NavBar";
-import ClickyHeader from "./components/clickyHeader";
-import ImageGrid from "./components/image-grid";
-// import Footer from "./components/Footer";
-import images from "./images.json";
-// import './App.css';
+import './App.css';
+import ImageBox from './components/image-box';
+import ClickyHeader from './components/header';
+import NavBar from './components/nav-bar';
+import images from './images.json'
+
+function shuffle(array) {
+  var currentIndex = array.length, temporaryValue, randomIndex;
+
+  while (0 !== currentIndex) {
+    randomIndex = Math.floor(Math.random() * currentIndex);
+    currentIndex -= 1;
+    temporaryValue = array[currentIndex];
+    array[currentIndex] = array[randomIndex];
+    array[randomIndex] = temporaryValue;
+  }
+  return array;
+};
+
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      score: 0,
-      topScore: 0,
-      guessedCorrectly: null,
-      alreadyGuessed: null,
-      images: [],
-    }
-    for(let i=0; this.state.images.length < 13; i++) {
-      this.state.images.push(i);
-    }
+  
+  state = {
+    images,
+    score: 0
   }
 
-  shuffleImages = id => {
-    const images = this.state.images.sort(function(a, b){return 0.5 - Math.random()});
-    this.setState({ images });
-  };
+  // When user clicks on image pass in image object
+  handleClick = image => {
+    
+    //If there is one unguessed image left and the user clicks on the correct one, run this function
+    if (image.guessed === false && this.state.score === 11) {
+        
+        //Reset each images guessed value to false
+        this.state.images.map(image => {
+          return image.guessed = false
+        })
 
-  addScore = () => {
-    console.log(this.state);
-    this.setState ({
-      score: this.state.score + 1
-    })
+        //Reset state
+        this.setState({
+          images: images,
+          score: 0
+        })
+
+        alert("You Win!");
+    } 
+      
+    //If the clicked image's guessed value is false, run this function
+    else if (image.guessed === false) {
+
+      var imageArr =[]
+      var clickedImage = image.id
+      var score = this.state.score
+
+      
+      //Map array and push to new array
+      this.state.images.map(image => {
+        return imageArr.push(image);
+      })
+
+      //Run through new array, find clicked image and set its guessed value to true
+      for (let i=0; i < imageArr.length; i++) {
+        if (imageArr[i].id === clickedImage) {
+          imageArr[i].guessed = true;
+        }
+      }
+      
+      //Update state
+      this.setState({
+        score: score += 1,
+        images: shuffle(imageArr)
+      })
+
+    } 
+    
+    //If image has already been clicked, run this function
+    else {
+
+      //Reset each images guessed value to false
+      this.state.images.map(image => {
+        return image.guessed = false
+      })
+
+      //Reset state
+      this.setState({
+        images: images,
+        score: 0
+      })
+
+      alert("You lose!")
+    }
   }
-
-
+    
   render() {
     return (
+      
       <div className="App">
-      <NavBar />
-      <ClickyHeader />
-      <ImageGrid imageOrder={this.state.images} addScore={this.addScore}/>
-      {/* <Footer /> */}
+
+        <NavBar 
+        score={this.state.score}
+        />
+
+        <ClickyHeader/>
+        
+        <div className="images">
+          {this.state.images.map(image => (
+            <ImageBox 
+              id={image.id}
+              image={image.image}
+              guessed={image.guessed}
+              handleClick={this.handleClick}
+            />
+          ))}
+        </div>
+
       </div>
     );
   }

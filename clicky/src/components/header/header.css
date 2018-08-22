@@ -1,0 +1,13 @@
+.app-header {
+  background-color: #0085CA;
+  height: 200px;
+  padding-top: 50px;
+}
+
+.app-title {
+  font-size: 1.5rem;
+}
+
+.app-sub-title {
+  font-size: 2rem;
+}

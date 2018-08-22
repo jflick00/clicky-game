@@ -17,5 +17,4 @@ class ClickyHeader extends Component {
   }
 }
 
-
 export default ClickyHeader;

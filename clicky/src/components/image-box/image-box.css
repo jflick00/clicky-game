@@ -1,7 +1,7 @@
-.image-box {
-    margin: 0 15px;
+img {
+  margin: 10px;
     height: 100px;
     width: 100px;
     border: solid 1px black;
-    /* background-color: grey; */
+    background-color: grey;
 }

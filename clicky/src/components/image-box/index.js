@@ -1,16 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import './image-box.css';
-import '../../images.json';
 
-class ImageBox extends Component {
-    render() {
-        console.log('image-box', this.props)
-        return  (
-            <div className="image-box" onClick={this.props.addScore}>
-                  {/* <img src={props.image} /> */}
-            </div>
-        );
-    }
-}
+const ImageBox = props => (
+    <img alt={props.name} src={props.image} onClick={() => props.handleClick(props)}/>
+);
 
 export default ImageBox;
